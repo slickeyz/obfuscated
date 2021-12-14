@@ -39,27 +39,7 @@ Prediction_Settings = {
     AutoSettings = false,
     Prediction = 0.165
 },
-KillSay = {
-    Type = "After Dead",
-    OldPlayer = "",
-    Cooldown = false,
-    CustomMessage = false,
-    CustomMessageText = "@s is tapped!",
-    Message = {
-        "@s is sus.",
-        "nn tapped, @s bad cheat.",
-        "ninja.lol on top, @s is clapped.",
-        "@s is rekted.",
-        "slatti>you",
-        "you are just bad get ninja.lol",
-        "u rly thought",
-        "bad boy clique",
-        "noob",
-        "xD",
-        "why are you that bad son",
-        "you shall quit"
-    }
-},
+
 Aimbot = {
     Enabled = false,
     Aiming = false,
