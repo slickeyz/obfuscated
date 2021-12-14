@@ -4,7 +4,10 @@ if game.Players.LocalPlayer:IsFriendsWith(sandy) then
 
 print("whitelisted")
 
-getgenv().paidSettings = {
+
+
+
+getgenv().slattiSettings = {
     PerformanceMode = true,
     turksense = false,
     TargetKey = "Q",
@@ -13,11 +16,11 @@ getgenv().paidSettings = {
 
 
 
-local paidSettings = getgenv().paidSettings
+local slattiSettings = getgenv().slattiSettings
 
-if paidSettings == nil then
+if slattiSettings == nil then
 
-getgenv().paidSettings = {
+getgenv().slattiSettings = {
     PerformanceMode = true,
     turksense = false,
     TargetKey = "Q",
@@ -36,7 +39,27 @@ Prediction_Settings = {
     AutoSettings = false,
     Prediction = 0.165
 },
-
+KillSay = {
+    Type = "After Dead",
+    OldPlayer = "",
+    Cooldown = false,
+    CustomMessage = false,
+    CustomMessageText = "@s is tapped!",
+    Message = {
+        "@s is sus.",
+        "nn tapped, @s bad cheat.",
+        "ninja.lol on top, @s is clapped.",
+        "@s is rekted.",
+        "slatti>you",
+        "you are just bad get ninja.lol",
+        "u rly thought",
+        "bad boy clique",
+        "noob",
+        "xD",
+        "why are you that bad son",
+        "you shall quit"
+    }
+},
 Aimbot = {
     Enabled = false,
     Aiming = false,
@@ -116,7 +139,7 @@ Target = {
     Enabled = false,
     TargetUser = nil,
     WallCheck = false,
-    Bind = paidSettings.TargetKey
+    Bind = slattiSettings.TargetKey
 }
 }
 
@@ -482,9 +505,9 @@ Library.theme.accentcolor2 = Color3.fromRGB(128, 23, 90)
 Library.theme.fontsize = 15
 Library.theme.titlesize = 17
 
-if paidSettings.Watermark == true then
+if slattiSettings.Watermark == true then
 
-Library:CreateWatermark("ninja.lol | {fps} | {game} | beta")
+Library:CreateWatermark("ninja.lol | {fps} | {game} | paid vers, different and optimized scripts..")
 
 end
 
@@ -512,7 +535,7 @@ Settings.SilentAim.IgnoreFOV = State
 end)
 
 
-SilentAimSection:AddDropdown('Modes', {"Normal", "Insane"}, "Normal", false, function(Option)
+SilentAimSection:AddDropdown('Modes', {"Normal", "Insane"}, "Insane", false, function(Option)
 Settings.SilentAim.Mode = Option
 end)
 
@@ -520,7 +543,7 @@ SilentAimSection:AddDropdown('Hitbox', {"Head", "HumanoidRootPart"}, "HumanoidRo
 Settings.SilentAim.Hitbox = Option
 end)
 
-SilentAimSection:AddDropdown('Nearest', {"Mouse", "Distance"}, "Distance", false, function(Option)
+SilentAimSection:AddDropdown('Nearest', {"Mouse", "Distance"}, "Mouse", false, function(Option)
 Settings.SilentAim.Nearest = Option
 end)
 
@@ -553,6 +576,395 @@ end)
 FOVSection:AddColorpicker("Color", Settings.SilentAim.FOV.Color, function(Color)
 Settings.SilentAim.FOV.Color = Color
 end)
+
+
+
+
+
+if not slattiSettings.PerformanceMode then
+local ESPLibrary = Module.Functions.HttpGet("https://gist.githubusercontent.com/VaultGitos/5a937cdc7a753160232d86dcc3ce79a6/raw/99cce502c74b1574abfd8d79d36da3c8aa3be83d/ESP.lua")
+local VisualsTab = Window:CreateTab("Visuals")
+local ESPSection = VisualsTab:CreateSector("ESP", "left")
+
+local BoxToggle = ESPSection:AddToggle('Boxes', false, function(State)
+    ESPLibrary.Boxes = State
+end)
+
+BoxToggle:AddColorpicker(Color3.fromRGB(255, 255, 255), function(Color)
+    ESPLibrary.BoxesColor = Color
+end)
+
+local NameToggle = ESPSection:AddToggle('Name', false, function(State)
+    ESPLibrary.Names = State
+end)
+
+NameToggle:AddColorpicker(Color3.fromRGB(255, 255, 255), function(Color)
+    ESPLibrary.NamesColor = Color
+end)
+
+local DistanceToggle = ESPSection:AddToggle('Distance', false, function(State)
+    ESPLibrary.Distance = State
+end)
+
+DistanceToggle:AddColorpicker(Color3.fromRGB(255, 255, 255), function(Color)
+    ESPLibrary.DistanceColor = Color
+end)
+
+local ChamToggle = ESPSection:AddToggle('Chams', false, function(State)
+    ESPLibrary.Cham = State
+end)
+
+ESPSection:AddColorpicker("Cham Color 1", Color3.fromRGB(255, 255, 255), function(Color)
+    ESPLibrary.ChamColor1 = Color
+end)
+
+ESPSection:AddColorpicker("Cham Color 2", Color3.fromRGB(255, 255, 255), function(Color)
+    ESPLibrary.ChamColor2 = Color
+end)
+end
+
+game:GetService("Workspace").Players.ChildRemoved:Connect(function(PlayerThatIsGone)
+if PlayerThatIsGone.Name == Settings.KillSay.OldPlayer and Settings.KillSay.Type == "After Dead" then
+    if Settings.KillSay.CustomMessage then
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Settings.KillSay.CustomMessageText:gsub("@s", Settings.KillSay.OldPlayer), "All")
+    else
+        game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Settings.KillSay.Message[math.random(1, 4)]:gsub("@s", Settings.KillSay.OldPlayer), "All")
+    end
+end
+end)
+
+UserInputService.InputBegan:Connect(function(Key, Break)
+if Key.UserInputType == InputType.MouseButton2 and not Break then
+    Settings.Aimbot.Aiming = true
+end
+if Key.UserInputType == InputType.MouseButton1 and not Break then
+    if Module.Functions.Network(LocalPlayer) then
+        if LocalPlayer.Character:FindFirstChildOfClass("Tool") and LocalPlayer.Character:FindFirstChildOfClass("Tool"):FindFirstChild("Ammo") and LocalPlayer.Character:FindFirstChildOfClass("Tool"):FindFirstChild("Ammo").Value ~= 0 then
+            Settings.KillSay.OldPlayer = Module.Functions.TargetCheck(Settings.SilentAim.Nearest).Name
+            Settings.KillSay.Cooldown = true
+            spawn(function()
+                wait(1)
+                Settings.KillSay.Cooldown = false
+            end)
+        end
+    end
+    if Settings.SilentAim.Enabled and Settings.SilentAim.WallBang and Module.Functions.Network(LocalPlayer) then
+        if not Module.Functions.IsVisible(Module.Functions.TargetCheck(Settings.SilentAim.Nearest).Character.HumanoidRootPart, LocalPlayer.Character.HumanoidRootPart) and LocalPlayer.Character:FindFirstChildOfClass("Tool") and LocalPlayer.Character:FindFirstChildOfClass("Tool"):FindFirstChild("Ammo") and LocalPlayer.Character:FindFirstChildOfClass("Tool"):FindFirstChild("Ammo").Value ~= 0 then
+            if LocalPlayer.Character.RightHand:FindFirstChild("RightWrist") then
+                LocalPlayer.Character.RightHand:FindFirstChild("RightWrist"):Destroy()
+            end
+            wait(0.1)
+            LocalPlayer.Character.Humanoid:ChangeState(11)
+            LocalPlayer.Character.RightHand.CFrame = Module.Functions.TargetCheck(Settings.SilentAim.Nearest).Character.HumanoidRootPart.CFrame * CFrame.new(0, -1, 0)
+        end
+    end
+end
+if Key.KeyCode == Enum.KeyCode[Settings.Target.Bind] and not Break then
+    if Settings.Target.Enabled then
+        if Module.Functions.IsVisible(Module.Functions.TargetCheck(Settings.SilentAim.Nearest).Character.HumanoidRootPart, LocalPlayer.Character.HumanoidRootPart) then
+            Settings.Target.TargetUser = Module.Functions.TargetCheck(Settings.SilentAim.Nearest).Name
+            Notify({
+                Title = Script.Name .. " " .. Script.Version,
+                Description = "Targetted " .. Module.Functions.TargetCheck(Settings.SilentAim.Nearest).Name .. " (" .. Module.Functions.TargetCheck(Settings.SilentAim.Nearest).DisplayName .. ")",
+                Duration = 3
+            })
+        end
+    end
+end
+end)
+
+UserInputService.InputEnded:Connect(function(Key, Break)
+if Key.UserInputType == InputType.MouseButton2 and not Break then
+    Settings.Aimbot.Aiming = false
+end
+if Key.UserInputType == InputType.MouseButton1 and not Break then
+    if Module.Functions.Network(LocalPlayer) then
+        --[[
+            local GRightWrist = Instance.new("Motor6D", LocalPlayer.Character.RightHand)
+            GRightWrist.C0 = CFrame.new(1.18422506e-07, -0.5009287, -6.81715525e-18, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+            GRightWrist.C1 = CFrame.new(3.55267503e-07, 0.125045404, 5.92112528e-08, 1, 0, 0, 0, 1, 0, 0, 0, 1)
+            GRightWrist.CurrentAngle = 0
+            GRightWrist.Name = "RightWrist"
+            GRightWrist.Part0 = LocalPlayer.Character.RightLowerArm
+            GRightWrist.Part1 = LocalPlayer.Character.RightHand
+        ]]
+        wait(0.75)
+        LocalPlayer.Character.RightHand.CFrame = LocalPlayer.Character.HumanoidRootPart.CFrame * CFrame.new(0, 1, 0)
+    end
+end
+end)
+
+local __Index;
+__Index = hookmetamethod(game, "__index", function(t, k)
+if t == Mouse and (tostring(k) == "Hit" or tostring(k) == "Target") then
+    if Settings.Target.Enabled then
+        if Settings.Target.TargetUser ~= nil then
+            if Players:FindFirstChild(Settings.Target.TargetUser) ~= nil and Module.Functions.Network(Players[Settings.Target.TargetUser]) then
+                if (not Settings.Target.WallCheck or Module.Functions.IsVisible(Players[Settings.Target.TargetUser].Character.HumanoidRootPart, LocalPlayer.Character.HumanoidRootPart)) then
+                    local TargetBody
+                    if Players[Settings.Target.TargetUser].Character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall then
+                        TargetBody = Players[Settings.Target.TargetUser].Character.LeftFoot
+                    else
+                        TargetBody = Players[Settings.Target.TargetUser].Character[Settings.SilentAim.Hitbox]
+                    end
+                    local Prediction = TargetBody.CFrame + (TargetBody.Velocity * Settings.Prediction_Settings.Prediction)
+
+                    return (tostring(k) == "Hit" and Prediction or tostring(k) == "Target" and TargetBody)
+                end
+            end
+        end
+    else
+        if Settings.SilentAim.Enabled then
+            local NearestTarget, NearestPos = Module.Functions.TargetCheck(Settings.SilentAim.Nearest)
+            if NearestTarget and (not Settings.SilentAim.VisibleCheck or Module.Functions.IsVisible(NearestTarget.Character.HumanoidRootPart, LocalPlayer.Character.HumanoidRootPart)) and (not Settings.SilentAim.FOV.Enabled or Settings.SilentAim.FOV.Size > NearestPos) then
+                local TargetBody
+                if NearestTarget.Character.Humanoid:GetState() == Enum.HumanoidStateType.Freefall and Settings.SilentAim.Mode == "Insane" then
+                    TargetBody = NearestTarget.Character.LeftFoot
+                else
+                    TargetBody = NearestTarget.Character[Settings.SilentAim.Hitbox]
+                end
+
+                local Prediction 
+                if Settings.Prediction_Settings.AutoSettings then
+                    Prediction = TargetBody.CFrame + (TargetBody.Velocity * Settings.Prediction_Settings.Prediction)
+                else
+                    Prediction = TargetBody.CFrame + (TargetBody.Velocity * 0.165)
+                end
+
+                return (tostring(k) == "Hit" and Prediction or tostring(k) == "Target" and TargetBody)
+            end
+        end
+    end
+end
+
+return __Index(t, k)
+end)
+
+local __Namecall;
+__Namecall = hookmetamethod(game, "__namecall", function(self, ...)
+local Args = {...}
+local Method = getnamecallmethod()
+
+if tostring(self.Name) == "MainEvent" and tostring(Method) == "FireServer" then
+    if Args[1] == "TeleportDetect" or Args[1] == "CHECKER_1" or Args[1] == "OneMoreTime" then
+        return
+    end
+end
+
+return __Namecall(self, ...)
+end)
+
+if not Module.DrawingInstance["FOV"] then
+Module.DrawingInstance["FOV"] = Module.Drawing.Circle(1)
+end
+
+if not Module.DrawingInstance["FOV2"] then
+Module.DrawingInstance["FOV2"] = Module.Drawing.Circle(1)
+end
+
+RunService.RenderStepped:Connect(function()
+if Settings.Prediction_Settings.AutoSettings then
+    local PingStats = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+    local Value = tostring(PingStats)
+    local PingValue = Value:split(" ")
+    local PingNumber = tonumber(PingValue[1])
+
+    Settings.Prediction_Settings.Prediction = PingNumber / 1000 + 0.037
+end
+
+if Settings.Aimbot.Enabled and Settings.Aimbot.Aiming then
+    local NearestTarget, NearestPos = Module.Functions.TargetCheck(Settings.Aimbot.Nearest)
+    if NearestTarget and (not Settings.Aimbot.VisibleCheck or Module.Functions.IsVisible(NearestTarget.Character.HumanoidRootPart, LocalPlayer.Character.HumanoidRootPart)) and (not Settings.Aimbot.FOV.Enabled or Settings.Aimbot.FOV.Size > NearestPos) then
+        local Prediction = NearestTarget.Character[Settings.Aimbot.Hitbox].CFrame + (NearestTarget.Character[Settings.Aimbot.Hitbox].Velocity * Settings.Prediction_Settings.Prediction)
+        CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Prediction.Position)
+    end
+end
+
+if Settings.SilentAim.FOV.Enabled then
+    Module.DrawingInstance["FOV"].Visible = true
+    Module.DrawingInstance["FOV"].Radius = Settings.SilentAim.FOV.Size
+    Module.DrawingInstance["FOV"].Transparency = Settings.SilentAim.FOV.Transparency
+    Module.DrawingInstance["FOV"].Filled = Settings.SilentAim.FOV.Filled
+    if Settings.SilentAim.FOV.Shape == "Custom" then
+        Module.DrawingInstance["FOV"].NumSides = Settings.SilentAim.FOV.Round
+    elseif Settings.SilentAim.FOV.Shape == "Octagon" then
+        Module.DrawingInstance["FOV"].NumSides = 12.5
+    else 
+        Module.DrawingInstance["FOV"].NumSides = 100
+    end
+    Module.DrawingInstance["FOV"].Color = Settings.SilentAim.FOV.Color
+    Module.DrawingInstance["FOV"].Position = Vector2.new(Mouse.X, Mouse.Y + GuiInset.Y)
+else
+    Module.DrawingInstance["FOV"].Visible = false
+end
+
+if Settings.Aimbot.FOV.Enabled then
+    Module.DrawingInstance["FOV2"].Visible = true
+    Module.DrawingInstance["FOV2"].Radius = Settings.Aimbot.FOV.Size
+    Module.DrawingInstance["FOV2"].Transparency = Settings.Aimbot.FOV.Transparency
+    Module.DrawingInstance["FOV2"].Filled = Settings.Aimbot.FOV.Filled
+    if Settings.Aimbot.FOV.Shape == "Custom" then
+        Module.DrawingInstance["FOV2"].NumSides = Settings.Aimbot.FOV.Round
+    elseif Settings.Aimbot.FOV.Shape == "Octagon" then
+        Module.DrawingInstance["FOV2"].NumSides = 12.5
+    else 
+        Module.DrawingInstance["FOV"].NumSides = 100
+    end
+    Module.DrawingInstance["FOV2"].Color = Settings.Aimbot.FOV.Color
+    Module.DrawingInstance["FOV2"].Position = Vector2.new(Mouse.X, Mouse.Y + GuiInset.Y)
+else
+    Module.DrawingInstance["FOV2"].Visible = false
+end
+
+if Module.Functions.Network(LocalPlayer) then
+    local Char = LocalPlayer.Character
+    local Root = Char.HumanoidRootPart
+    local Hum = Char.Humanoid
+
+    if Settings.ServerCrash.Enabled then
+        Hum:ChangeState(11)
+    end
+
+    if Settings.Movement.CFrameSpeed then
+        if Settings.Movement.Type == "Render" then
+            if Hum.MoveDirection.Magnitude > 0 then
+                Char:TranslateBy(Hum.MoveDirection)
+            end
+        end
+    end
+end
+end)
+
+loadstring[[
+game:GetService("RunService").Stepped:Connect(function() --// The broken part
+    if Settings.AntiAim.UndergroundWallbang then
+        for i, v in pairs(LocalPlayer.Character:GetDescendants()) do
+            if v:IsA("BasePart") and v.CanCollide == true then
+                v.CanCollide = false
+            end
+        end
+    end
+end)
+]]
+
+RunService.Heartbeat:Connect(function()
+if Module.Functions.Network(LocalPlayer) then
+    local Char = LocalPlayer.Character
+    local Root = Char.HumanoidRootPart
+    local Hum = Char.Humanoid
+
+    if Settings.Movement.CFrameSpeed then
+        if Settings.Movement.Type == "Heartbeat" then
+            if Hum.MoveDirection.Magnitude > 0 then
+                Char:TranslateBy(Hum.MoveDirection)
+            end
+        end
+    end
+
+    if Settings.SilentAim.LookAt then
+        local PrimaryPartOfChar = Char.PrimaryPart
+        local NearestMouse, NearestPos = Module.Functions.TargetCheck(Settings.SilentAim.Nearest)
+        if Module.Functions.Network(NearestMouse) then
+            if (not Settings.SilentAim.VisibleCheck or Module.Functions.IsVisible(NearestMouse.Character.HumanoidRootPart, LocalPlayer.Character.HumanoidRootPart)) and (not Settings.SilentAim.FOV.Enabled or Settings.SilentAim.FOV.Size > NearestPos) then
+                local NearestChar = NearestMouse.Character
+                local NearestRoot = NearestChar.HumanoidRootPart
+                local NearestPos = CFrame.new(PrimaryPartOfChar.Position, Vector3.new(NearestRoot.Position.X, NearestRoot.Position.Y, NearestRoot.Position.Z))
+                Char:SetPrimaryPartCFrame(NearestPos)
+            end
+        end
+    end
+
+    if Settings.AntiAim.NoAutoRotate then
+        Hum.AutoRotate = false
+    else
+        Hum.AutoRotate = true
+    end
+
+    if Settings.AntiAim.AntiPointAt then
+        for i, v in next, Players:GetPlayers() do
+            if v ~= LocalPlayer and Module.Functions.Network(v) and Module.Functions.Network(LocalPlayer) then
+                local BodyEffects = v.Character:FindFirstChild("BodyEffects")
+                local MousePos = BodyEffects:FindFirstChild("MousePos")
+                if BodyEffects ~= nil and MousePos ~= nil then
+                    local EnemyMouseMagnitude = (LocalPlayer.Character.HumanoidRootPart.Position - MousePos.Value).Magnitude
+                    if Settings.AntiAim.AntiPointAtDistance > EnemyMouseMagnitude then
+                        Root.CFrame = Root.CFrame * CFrame.new(math.random(1, 2) == 1 and 2 or -2, 0, 0)
+                    end
+                end
+            end
+        end
+    end
+
+    if Settings.AntiAim.UndergroundWallbang then
+        Hum:ChangeState(11)
+    end
+
+    if Settings.AntiAim.Enabled then
+        if Settings.AntiAim.Type == "Jitter" then
+            Module.Functions.Jitter(Settings.AntiAim.Speed, Settings.AntiAim.Angle)
+        else
+            Module.Functions.Spin(Settings.AntiAim.Speed)
+        end
+    end
+end
+end)
+
+while wait() do
+if Module.Functions.Network(LocalPlayer) then
+    local Char = LocalPlayer.Character
+    local Root = Char.HumanoidRootPart
+    local Hum = Char.Humanoid
+
+    if Settings.Triggerbot.Enabled then
+        for i, v in next, Players:GetPlayers() do 
+            if Module.Functions.Network(v) then 
+                if Mouse.Target:IsDescendantOf(v.Character) then 
+                    mouse1press()
+                    wait()
+                    mouse1release()
+                    if Settings.Triggerbot.Delay.Enabled then
+                        wait(Settings.Triggerbot.Delay.Value)
+                    end
+                end 
+            end
+        end
+    end
+
+    if Settings.KillSay.Type == "Before Dead" and Settings.KillSay.OldPlayer ~= nil then
+        if Players[Settings.KillSay.OldPlayer].Character.BodyEffects.Dead then
+            if Settings.KillSay.CustomMessage then
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Settings.KillSay.CustomMessageText:gsub("@s", Settings.KillSay.OldPlayer), "All")
+            else
+                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest:FireServer(Settings.KillSay.Message[math.random(1, 4)]:gsub("@s", Settings.KillSay.OldPlayer), "All")
+            end
+        end
+    end
+
+    if Settings.ServerCrash.Enabled then
+        Root.CFrame = workspace.Ignored.Shop["[Cranberry] - $3"].Head.CFrame * CFrame.new(0, -7, 0)
+        fireclickdetector(workspace.Ignored.Shop["[Cranberry] - $3"].ClickDetector)
+        fireclickdetector(workspace.Ignored.Shop["[Cranberry] - $3"].ClickDetector)
+        for i, v in pairs(LocalPlayer.Backpack:GetChildren()) do
+            if v.Name == tostring("[Cranberry]") then
+                v.Parent = LocalPlayer.Character
+                Settings.ServerCrash.Value = Settings.ServerCrash.Value + 1
+                CrashPercent:Set("Percent : " .. tostring(Settings.ServerCrash.Value * 100 / 500) .. "%" .. " / " .. "100%")
+                if Settings.ServerCrash.Value == 500 then
+                    Module.Functions.NilBody()
+                end
+            end
+        end
+    end
+end
+end
+
+while wait(3) do
+if Settings.KillSay.Cooldown then
+    Settings.KillSay.OldPlayer = ""
+end
+
+
+end
 
 else print("not whitelisted")
 
