@@ -1,3 +1,9 @@
+--// Decompiled Code. 
+sandy = "User id of alt account"
+if game.Players.LocalPlayer:IsFriendsWith(sandy) then
+
+print("whitelisted")
+
 
 -- init
 local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/MagikManz/Venyx-UI-Library/main/source.lua"))()
@@ -5,48 +11,70 @@ local UI = loadstring(game:HttpGet("https://raw.githubusercontent.com/MagikManz/
 local ui = UI.new("ninja.lol")
 
 
-local Aiming = loadstring(game:HttpGet("http://167.99.81.180/modules/SilentModule2.txt"))()
+local Aiming = loadstring(game:HttpGet("https://pastebin.com/raw/rnjQmBRb"))()
+
 local ESP = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
 local checks = loadstring(game:HttpGet("http://167.99.81.180/modules/Downed/SilentDowned2.txt"))()
-ESP:Toggle(false)
-ESP.Tracers = false
-ESP.Names = false
-ESP.Boxes = false
-Aiming.TeamCheck(false)
-Aiming.VisibleCheck = false
--- // Dependencies
 
--- // Services
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 
--- // Vars
 local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = Workspace.CurrentCamera
 
-local themes = {
-    Background = Color3.fromRGB(24, 24, 24),
-    Glow = Color3.fromRGB(0, 0, 0),
-    Accent = Color3.fromRGB(10, 10, 10),
-    LightContrast = Color3.fromRGB(20, 20, 20),
-    DarkContrast = Color3.fromRGB(14, 14, 14),  
-    TextColor = Color3.fromRGB(255, 255, 255)
-}
-
 local DaHoodSettings = {
-    SilentAim = false,
+    SilentAim = true,
     AimLock = false,
-    Prediction = 0.157
+    Prediction = 0.173,
+    AimLockKeybind = Enum.KeyCode.E
 }
-
 getgenv().DaHoodSettings = DaHoodSettings
 
+function Aiming.Check()
+    if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
+        return false
+    end
+
+    local Character = Aiming.Character(Aiming.Selected)
+    local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
+    local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+
+    if (KOd or Grabbed) then
+        return false
+    end
+
+    return true
+end
+
+local __index
+__index = hookmetamethod(game, "__index", function(t, k)
+    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
+        local SelectedPart = Aiming.SelectedPart
+
+        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
+            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+
+            return (k == "Hit" and Hit or SelectedPart)
+        end
+    end
+
+    return __index(t, k)
+end)
+
+RunService:BindToRenderStep("AimLock", 0, function()
+    if (DaHoodSettings.AimLock and Aiming.Check() and UserInputService:IsKeyDown(DaHoodSettings.AimLockKeybind)) then
+        local SelectedPart = Aiming.SelectedPart
+
+        local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+
+        CurrentCamera.CFrame = CFrame.lookAt(CurrentCamera.CFrame.Position, Hit.Position)
+    end
+    end)
 
 local tab = ui:Tab("Main")
-ui:Tab("Teleports"):Section("Teleports")
 
 local section = tab:Section("Silent Aim")
 
@@ -62,23 +90,28 @@ end)
 
 
 
+
+
 section:Slider("FOV Size", 0, 200, 10, function(value)
     Aiming.FOV = value
 end)
 
-
-
-local section1 = tab:Section("Checks")
-
-section1:Toggle("Picked Up", false, function(bool)
+section:Toggle("Picked Up", false, function(bool)
     checks.Pickup = bool
 end)
 
-section1:Toggle("Downed", false, function(bool)
+section:Toggle("Downed", false, function(bool)
     checks.Downed = bool
 end)
+
+
+
 
 
 section:Key("Key", Enum.UserInputType.LeftShift, function(key)
 	warn("sub")
 end)
+
+else print("not whitelisted")
+
+end
